@@ -27,6 +27,7 @@ public class UsersController {
         BinanceApiRestClient client = factory.newRestClient();
 
 
+        // TODO: tahagokce example for
         return ResponseEntity.ok(user);
     }
 }
