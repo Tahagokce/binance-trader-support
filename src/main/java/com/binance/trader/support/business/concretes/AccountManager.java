@@ -1,27 +1,32 @@
 package com.binance.trader.support.business.concretes;
 
 import com.binance.api.client.domain.account.*;
+import com.binance.api.client.domain.market.CandlestickInterval;
 import com.binance.trader.support.business.abstracts.AccountService;
 
 import java.util.List;
 
 import static com.binance.trader.support.api.controller.UsersController.client;
 
+
 public class AccountManager implements AccountService {
 
 
-    // Hesap bakiyesi döner
+
+    // Hesap bakiyesi döner.
     @Override
     public Account getAccountBalances(Long aLong) {
 
+
         Account account = client.getAccount(aLong, System.currentTimeMillis());
-    //  System.out.println(account.getBalances());
-    //  System.out.println(account.getAssetBalance("ETH"));
+        System.out.println(account.getBalances());
+        System.out.println(account.getAssetBalance("SHIB"));
+
         return account;
     }
 
 
-    // İşlemlerin listesi döner
+    // İşlemlerin listesi döner.
     @Override
     public List<Trade> getListOfTrades(String symbol) {
 
@@ -31,7 +36,7 @@ public class AccountManager implements AccountService {
     }
 
 
-    //para çekme geçmişini döner
+    // Para çekme geçmişini döner.
     @Override
     public WithdrawHistory getWithDraw(String symbol) {
 
@@ -40,7 +45,7 @@ public class AccountManager implements AccountService {
 
     }
 
-    // Para yatırma geçmişi döner
+    // Para yatırma geçmişi döner.
     @Override
     public DepositHistory getDepositHistory(String symbol) {
 
@@ -49,7 +54,7 @@ public class AccountManager implements AccountService {
     }
 
 
-    // Para yatırma adresi döner
+    // Para yatırma adresi döner.
     @Override
     public DepositAddress getDepositAddress(String symbol) {
 

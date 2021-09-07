@@ -18,6 +18,9 @@ import static com.binance.trader.support.api.controller.UsersController.client;
 
 public class OrderManager implements OrderService {
 
+
+
+
     //  Acik siparişlerin listedi döner.
     @Override
     public List<Order> gettingListOfOpenOrders(String symbol) {
@@ -62,7 +65,7 @@ public class OrderManager implements OrderService {
     }
 
 
-    // Test LIMIT siparişi verme
+    // Test LIMIT siparişi verme.
     @Override
     public void placingTestLimitOrder(String symbol, TimeInForce timeInForce, String quantity, String price) {
 
@@ -70,7 +73,7 @@ public class OrderManager implements OrderService {
     }
 
 
-    // Test MARKET siparişi verme
+    // Test MARKET siparişi verme.
     @Override
     public void placingTestMarketOrder(String symbol, String quantity) {
 
@@ -78,7 +81,7 @@ public class OrderManager implements OrderService {
     }
 
 
-    // Gerçek LIMIT siparişi verme
+    // Gerçek LIMIT siparişi verme.
     @Override
     public NewOrderResponse placingRealLimitOrder(String symbol, TimeInForce timeInForce, String quantity, String price) {
 
