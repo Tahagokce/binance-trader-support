@@ -1,22 +1,23 @@
 package com.binance.trader.support.business.abstracts;
 
 import com.binance.api.client.domain.market.*;
+import com.core.utilities.results.DataResult;
 
 import java.util.List;
 
 public interface MarketDataService {
 
-    OrderBook gettindDepthOfSymbol (String symbol,int var);
+    DataResult<OrderBook> gettindDepthOfSymbol (String symbol, int var);
 
-    TickerStatistics gettingLatestPriceOfSymbol(String symbol);
+    DataResult<TickerStatistics> gettingLatestPriceOfSymbol(String symbol);
 
-    List<TickerPrice> gettingAllLatestPrices();
+    DataResult<List<TickerPrice>> gettingAllLatestPrices();
 
-    List<AggTrade> gettingAggTrades(String symbol);
+    DataResult<List<AggTrade>> gettingAggTrades(String symbol);
 
-    List<Candlestick> weeklyCandlestickBarsForSymbol(String symbol, CandlestickInterval candlestickInterval);
+    DataResult<List<Candlestick>> weeklyCandlestickBarsForSymbol(String symbol, CandlestickInterval candlestickInterval);
 
-    List<BookTicker> gettingAllBookTickers();
+    DataResult<List<BookTicker>> gettingAllBookTickers();
 
 
 

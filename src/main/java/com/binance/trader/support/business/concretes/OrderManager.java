@@ -9,6 +9,9 @@ import com.binance.api.client.domain.account.request.OrderRequest;
 import com.binance.api.client.domain.account.request.OrderStatusRequest;
 import com.binance.api.client.exception.BinanceApiException;
 import com.binance.trader.support.business.abstracts.OrderService;
+import com.core.utilities.results.DataResult;
+import com.core.utilities.results.ErrorDataResult;
+import com.core.utilities.results.SuccessDataResult;
 
 import java.util.List;
 
@@ -23,45 +26,45 @@ public class OrderManager implements OrderService {
 
     //  Acik siparişlerin listedi döner.
     @Override
-    public List<Order> gettingListOfOpenOrders(String symbol) {
+    public DataResult<List<Order>> gettingListOfOpenOrders(String symbol) {
 
         List<Order> openOrders = client.getOpenOrders(new OrderRequest(symbol));
 
-        return openOrders;
+        return new SuccessDataResult<List<Order>>(openOrders);
     }
 
 
     // Verilen limitteki siparişleri listeler.
     @Override
-    public List<Order> gettingListOfAllOrdersWithLimit(String symbol, int limit) {
+    public DataResult<List<Order>> gettingListOfAllOrdersWithLimit(String symbol, int limit) {
 
         List<Order> allOrders = client.getAllOrders(new AllOrdersRequest(symbol).limit(limit));
 
-        return allOrders;
+        return new SuccessDataResult<List<Order>>(allOrders);
     }
 
 
     // Belirli siparişin durumunu döner.
     @Override
-    public Order getStatusOfaParticularOrder(String symbol, long orderId) {
+    public DataResult<Order> getStatusOfaParticularOrder(String symbol, long orderId) {
 
         Order order = client.getOrderStatus(new OrderStatusRequest(symbol, orderId));
 
-        return order;
+        return new SuccessDataResult<Order>(order) ;
     }
 
 
     // Bir siparişi iptal etme.
     @Override
-    public String cancelingAnOrder(String symbol, long orderId) {
+    public DataResult<String> cancelingAnOrder(String symbol, long orderId) {
 
         try {
             client.cancelOrder(new CancelOrderRequest(symbol, orderId));
         } catch (BinanceApiException e) {
-            return e.getError().getMsg();
+            return new ErrorDataResult<String>(e.getError().getMsg().toString(),"hata");
         }
 
-        return ("Success");
+        return new SuccessDataResult<String>("Başarılı","başarılı");
     }
 
 
@@ -70,6 +73,8 @@ public class OrderManager implements OrderService {
     public void placingTestLimitOrder(String symbol, TimeInForce timeInForce, String quantity, String price) {
 
         client.newOrderTest(limitBuy(symbol, timeInForce, quantity, price));
+
+
     }
 
 
@@ -83,9 +88,9 @@ public class OrderManager implements OrderService {
 
     // Gerçek LIMIT siparişi verme.
     @Override
-    public NewOrderResponse placingRealLimitOrder(String symbol, TimeInForce timeInForce, String quantity, String price) {
+    public DataResult<NewOrderResponse> placingRealLimitOrder(String symbol, TimeInForce timeInForce, String quantity, String price) {
 
         NewOrderResponse newOrderResponse = client.newOrder(limitBuy(symbol, timeInForce,  quantity, price));
-        return newOrderResponse;
+        return new SuccessDataResult<NewOrderResponse>(newOrderResponse) ;
     }
 }

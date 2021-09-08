@@ -2,6 +2,8 @@ package com.binance.trader.support.business.concretes;
 
 import com.binance.api.client.domain.market.*;
 import com.binance.trader.support.business.abstracts.MarketDataService;
+import com.core.utilities.results.DataResult;
+import com.core.utilities.results.SuccessDataResult;
 
 import java.util.List;
 
@@ -11,65 +13,65 @@ public class MarketDataManager implements MarketDataService {
 
 
 
-
     // Verilen sembolün derinliğini döner.
     @Override
-    public OrderBook gettindDepthOfSymbol(String symbol, int var) {
+    public DataResult<OrderBook> gettindDepthOfSymbol(String symbol, int var) {
 
         OrderBook orderBook = client.getOrderBook(symbol, var);
 
        // orderBook.getAsks();
 
-        return orderBook;
+        return new SuccessDataResult<OrderBook>(orderBook) ;
     }
 
 
     // Verilen sembolün son fiyatını döner
     @Override
-    public TickerStatistics gettingLatestPriceOfSymbol(String symbol) {
+    public DataResult<TickerStatistics> gettingLatestPriceOfSymbol(String symbol) {
 
         TickerStatistics tickerStatistics = client.get24HrPriceStatistics(symbol);
 
-        return tickerStatistics;
+        return new SuccessDataResult<TickerStatistics>(tickerStatistics) ;
     }
 
 
     // En son fiyatları listeler.
     @Override
-    public List<TickerPrice> gettingAllLatestPrices() {
+    public DataResult<List<TickerPrice>> gettingAllLatestPrices() {
 
         List<TickerPrice> allPrices = client.getAllPrices();
 
-        return allPrices;
+        return new SuccessDataResult<List<TickerPrice>>(allPrices) ;
     }
 
 
     // Agg ticareti döndürür. ????
     @Override
-    public List<AggTrade> gettingAggTrades(String symbol) {
+    public DataResult<List<AggTrade>> gettingAggTrades(String symbol) {
 
         List<AggTrade> aggTrades = client.getAggTrades(symbol);
 
-        return aggTrades;
+        return new SuccessDataResult<List<AggTrade>>(aggTrades);
+
     }
 
 
     // Sembolün haftalık Candlastiğini (şamdan çubukları) döner.
     @Override
-    public List<Candlestick> weeklyCandlestickBarsForSymbol(String symbol, CandlestickInterval candlestickInterval) {
+    public DataResult<List<Candlestick>> weeklyCandlestickBarsForSymbol(String symbol, CandlestickInterval candlestickInterval) {
 
         List<Candlestick> candlesticks = client.getCandlestickBars(symbol, candlestickInterval);
 
-        return candlesticks;
+        return new SuccessDataResult<List<Candlestick>>(candlesticks);
     }
 
 
     // Tüm kitap etiketlerini döner.
     @Override
-    public List<BookTicker> gettingAllBookTickers() {
+    public DataResult<List<BookTicker>> gettingAllBookTickers() {
 
         List<BookTicker> allBookTickers = client.getBookTickers();
 
-        return allBookTickers;
+        return new SuccessDataResult<List<BookTicker>>(allBookTickers);
     }
 }

@@ -1,8 +1,9 @@
 package com.binance.trader.support.business.concretes;
 
 import com.binance.api.client.domain.account.*;
-import com.binance.api.client.domain.market.CandlestickInterval;
 import com.binance.trader.support.business.abstracts.AccountService;
+import com.core.utilities.results.DataResult;
+import com.core.utilities.results.SuccessDataResult;
 
 import java.util.List;
 
@@ -15,58 +16,58 @@ public class AccountManager implements AccountService {
 
     // Hesap bakiyesi döner.
     @Override
-    public Account getAccountBalances(Long aLong) {
+    public DataResult<Account> getAccountBalances(Long aLong) {
 
 
         Account account = client.getAccount(aLong, System.currentTimeMillis());
         System.out.println(account.getBalances());
         System.out.println(account.getAssetBalance("SHIB"));
 
-        return account;
+        return new SuccessDataResult<Account>(account);
     }
 
 
     // İşlemlerin listesi döner.
     @Override
-    public List<Trade> getListOfTrades(String symbol) {
+    public DataResult<List<Trade>> getListOfTrades(String symbol) {
 
         List<Trade> myTrades = client.getMyTrades(symbol);
 
-        return myTrades;
+        return new SuccessDataResult<List<Trade>>(myTrades) ;
     }
 
 
     // Para çekme geçmişini döner.
     @Override
-    public WithdrawHistory getWithDraw(String symbol) {
+    public DataResult<WithdrawHistory> getWithDraw(String symbol) {
 
-        return  client.getWithdrawHistory(symbol);
+        return new SuccessDataResult<WithdrawHistory>(client.getWithdrawHistory(symbol));
 
 
     }
 
     // Para yatırma geçmişi döner.
     @Override
-    public DepositHistory getDepositHistory(String symbol) {
+    public DataResult<DepositHistory> getDepositHistory(String symbol) {
 
-        return client.getDepositHistory(symbol);
+        return new SuccessDataResult<>(client.getDepositHistory(symbol));
 
     }
 
 
     // Para yatırma adresi döner.
     @Override
-    public DepositAddress getDepositAddress(String symbol) {
+    public DataResult<DepositAddress> getDepositAddress(String symbol) {
 
-      return  client.getDepositAddress(symbol);
+      return new SuccessDataResult<DepositAddress> (client.getDepositAddress(symbol));
 
     }
 
     // ??
     @Override
-    public WithdrawResult withdraw(String var1, String var2, String var3, String var4, String var5) {
+    public DataResult<WithdrawResult> withdraw(String var1, String var2, String var3, String var4, String var5) {
 
-       return  client.withdraw(var1,var2,var3,var4,var5);
+       return new SuccessDataResult<>(client.withdraw(var1,var2,var3,var4,var5));
 
     }
 }

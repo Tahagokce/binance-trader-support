@@ -1,22 +1,23 @@
 package com.binance.trader.support.business.abstracts;
 
 import com.binance.api.client.domain.account.*;
+import com.core.utilities.results.DataResult;
 
 import java.util.List;
 
 public interface AccountService {
 
-    Account getAccountBalances(Long aLong);
+    DataResult<Account> getAccountBalances(Long aLong);
 
-    List<Trade> getListOfTrades(String symbol);
+    DataResult<List<Trade>> getListOfTrades(String symbol);
 
-    WithdrawHistory getWithDraw(String symbol);
+    DataResult<WithdrawHistory> getWithDraw(String symbol);
 
-    DepositHistory getDepositHistory(String symbol);
+    DataResult<DepositHistory> getDepositHistory(String symbol);
 
-    DepositAddress getDepositAddress(String symbol);
+    DataResult<DepositAddress> getDepositAddress(String symbol);
 
-    WithdrawResult withdraw (String var1, String var2, String var3, String var4, String var5);
+    DataResult<WithdrawResult> withdraw (String var1, String var2, String var3, String var4, String var5);
 
 }
 
