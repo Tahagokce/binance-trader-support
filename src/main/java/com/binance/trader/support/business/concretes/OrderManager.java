@@ -1,5 +1,7 @@
 package com.binance.trader.support.business.concretes;
 
+import com.binance.api.client.BinanceApiRestClient;
+import com.binance.api.client.BinanceApiSwapRestClient;
 import com.binance.api.client.domain.TimeInForce;
 import com.binance.api.client.domain.account.NewOrderResponse;
 import com.binance.api.client.domain.account.Order;
@@ -12,23 +14,24 @@ import com.binance.trader.support.business.abstracts.OrderService;
 import com.core.utilities.results.DataResult;
 import com.core.utilities.results.ErrorDataResult;
 import com.core.utilities.results.SuccessDataResult;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 import static com.binance.api.client.domain.account.NewOrder.limitBuy;
 import static com.binance.api.client.domain.account.NewOrder.marketBuy;
-import static com.binance.trader.support.api.controller.UsersController.client;
 
+@Service
+@RequiredArgsConstructor
 public class OrderManager implements OrderService {
-
-
-
+    private final BinanceApiRestClient binanceApiRestClient;
 
     //  Acik siparişlerin listedi döner.
     @Override
     public DataResult<List<Order>> gettingListOfOpenOrders(String symbol) {
 
-        List<Order> openOrders = client.getOpenOrders(new OrderRequest(symbol));
+        List<Order> openOrders = binanceApiRestClient.getOpenOrders(new OrderRequest(symbol));
 
         return new SuccessDataResult<List<Order>>(openOrders);
     }
@@ -38,7 +41,7 @@ public class OrderManager implements OrderService {
     @Override
     public DataResult<List<Order>> gettingListOfAllOrdersWithLimit(String symbol, int limit) {
 
-        List<Order> allOrders = client.getAllOrders(new AllOrdersRequest(symbol).limit(limit));
+        List<Order> allOrders = binanceApiRestClient.getAllOrders(new AllOrdersRequest(symbol).limit(limit));
 
         return new SuccessDataResult<List<Order>>(allOrders);
     }
@@ -48,9 +51,9 @@ public class OrderManager implements OrderService {
     @Override
     public DataResult<Order> getStatusOfaParticularOrder(String symbol, long orderId) {
 
-        Order order = client.getOrderStatus(new OrderStatusRequest(symbol, orderId));
+        Order order = binanceApiRestClient.getOrderStatus(new OrderStatusRequest(symbol, orderId));
 
-        return new SuccessDataResult<Order>(order) ;
+        return new SuccessDataResult<Order>(order);
     }
 
 
@@ -59,12 +62,12 @@ public class OrderManager implements OrderService {
     public DataResult<String> cancelingAnOrder(String symbol, long orderId) {
 
         try {
-            client.cancelOrder(new CancelOrderRequest(symbol, orderId));
+            binanceApiRestClient.cancelOrder(new CancelOrderRequest(symbol, orderId));
         } catch (BinanceApiException e) {
-            return new ErrorDataResult<String>(e.getError().getMsg().toString(),"hata");
+            return new ErrorDataResult<String>(e.getError().getMsg().toString(), "hata");
         }
 
-        return new SuccessDataResult<String>("Başarılı","başarılı");
+        return new SuccessDataResult<String>("Başarılı", "başarılı");
     }
 
 
@@ -72,8 +75,7 @@ public class OrderManager implements OrderService {
     @Override
     public void placingTestLimitOrder(String symbol, TimeInForce timeInForce, String quantity, String price) {
 
-        client.newOrderTest(limitBuy(symbol, timeInForce, quantity, price));
-
+        binanceApiRestClient.newOrderTest(limitBuy(symbol, timeInForce, quantity, price));
 
     }
 
@@ -82,7 +84,7 @@ public class OrderManager implements OrderService {
     @Override
     public void placingTestMarketOrder(String symbol, String quantity) {
 
-        client.newOrderTest(marketBuy(symbol, quantity));
+        binanceApiRestClient.newOrderTest(marketBuy(symbol, quantity));
     }
 
 
@@ -90,7 +92,7 @@ public class OrderManager implements OrderService {
     @Override
     public DataResult<NewOrderResponse> placingRealLimitOrder(String symbol, TimeInForce timeInForce, String quantity, String price) {
 
-        NewOrderResponse newOrderResponse = client.newOrder(limitBuy(symbol, timeInForce,  quantity, price));
-        return new SuccessDataResult<NewOrderResponse>(newOrderResponse) ;
+        NewOrderResponse newOrderResponse = binanceApiRestClient.newOrder(limitBuy(symbol, timeInForce, quantity, price));
+        return new SuccessDataResult<NewOrderResponse>(newOrderResponse);
     }
 }

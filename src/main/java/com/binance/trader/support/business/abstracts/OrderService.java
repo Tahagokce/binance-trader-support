@@ -8,8 +8,6 @@ import com.core.utilities.results.DataResult;
 import java.util.List;
 
 public interface OrderService {
-
-
     DataResult<List<Order>> gettingListOfOpenOrders(String symbol);
 
     DataResult<List<Order>> gettingListOfAllOrdersWithLimit(String symbol, int limit);

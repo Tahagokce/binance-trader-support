@@ -1,22 +1,25 @@
 package com.binance.trader.support.business.concretes;
 
 import com.binance.api.client.BinanceApiSwapRestClient;
-import com.binance.api.client.domain.account.*;
+import com.binance.api.client.domain.account.Liquidity;
+import com.binance.api.client.domain.account.Pool;
+import com.binance.api.client.domain.account.SwapHistory;
+import com.binance.api.client.domain.account.SwapQuote;
+import com.binance.api.client.domain.account.SwapRecord;
+import com.binance.trader.support.business.abstracts.SwapService;
 import com.core.utilities.results.DataResult;
 import com.core.utilities.results.SuccessDataResult;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.binance.trader.support.api.controller.UsersController.factory;
-public class SwapManager {
+@Service
+@RequiredArgsConstructor
+public class SwapManager implements SwapService {
+    private final BinanceApiSwapRestClient swapClient;
 
-    private BinanceApiSwapRestClient swapClient;
-
-    public SwapManager() {
-        this.swapClient = factory.newSwapRestClient() ;
-    }
-
-    public DataResult<List<Pool>> poolLiquidityInfo(){
+    public DataResult<List<Pool>> poolLiquidityInfo() {
         List<Pool> pools = swapClient.listAllSwapPools();
         for (Pool pool : pools) {
             System.out.println(pool);
@@ -27,19 +30,19 @@ public class SwapManager {
     }
 
 
-    public DataResult<SwapQuote> swapQuote (String s, String s1, String s2 ) {
+    public DataResult<SwapQuote> swapQuote(String s, String s1, String s2) {
         // SwapQuote swapQuote = swapClient.requestQuote("USDT", "USDC", "10");
-        SwapQuote swapQuote = swapClient.requestQuote(s,s1,s2);
+        SwapQuote swapQuote = swapClient.requestQuote(s, s1, s2);
         System.out.println(swapQuote);
         return new SuccessDataResult<SwapQuote>(swapQuote);
 
     }
 
 
-    public DataResult<SwapHistory> swapRecord (String s, String s1, String s2 ){
+    public DataResult<SwapHistory> swapRecord(String s, String s1, String s2) {
 
         // SwapRecord swapRecord = swapClient.swap("USDT", "USDC", "10");
-        SwapRecord swapRecord = swapClient.swap(s,s1,s2);
+        SwapRecord swapRecord = swapClient.swap(s, s1, s2);
         SwapHistory swapHistory = swapClient.getSwapHistory(swapRecord.getSwapId());
         System.out.println(swapHistory);
 
@@ -48,7 +51,6 @@ public class SwapManager {
     }
 
 
-
-    }
+}
 
 
