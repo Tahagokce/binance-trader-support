@@ -14,7 +14,9 @@
     <name>binance-trader-support</name>
     <description>binance-trader-support</description>
     <properties>
-        <java.version>16</java.version>
+        <java.version>11</java.version>
+        <binance.api.version>1.0.0</binance.api.version>
+        <core.version>1.0-SNAPSHOT</core.version>
     </properties>
     <dependencies>
         <dependency>
@@ -50,7 +52,22 @@
         <dependency>
             <groupId>com.binance.api</groupId>
             <artifactId>binance-api-client</artifactId>
-            <version>1.0.0</version>
+            <version>${binance.api.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.core</groupId>
+            <artifactId>core</artifactId>
+            <version>${core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.telegram</groupId>
+            <artifactId>telegrambots</artifactId>
+            <version>3.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.telegram</groupId>
+            <artifactId>telegramapi</artifactId>
+            <version>66.2</version>
         </dependency>
     </dependencies>
 
