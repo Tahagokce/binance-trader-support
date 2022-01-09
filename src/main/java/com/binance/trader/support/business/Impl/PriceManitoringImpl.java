@@ -41,19 +41,19 @@ public class PriceManitoringImpl implements PriceManitoringService {
         }
         selectedTokenList.forEach(selectedToken -> {
             TickerStatistics tickerStatistics = symbolManager.latestPriceOfSymbol(selectedToken.getSymbol().getSymbolName()).getData();
-            if (selectedToken.getOldPrice() == null || selectedToken.getOldPrice() == 0) {
-                selectedToken.setLastPrice(Double.parseDouble(tickerStatistics.getLastPrice()));
-                selectedToken.setOldPrice(Double.parseDouble(tickerStatistics.getLastPrice()));
+            if (selectedToken.getOldPrice() == null || Double.parseDouble(selectedToken.getOldPrice()) == 0) {
+                selectedToken.setLastPrice(tickerStatistics.getLastPrice());
+                selectedToken.setOldPrice(tickerStatistics.getLastPrice());
                 selectedTokenService.save(selectedToken);
             } else {
                 selectedToken.setOldPrice(selectedToken.getLastPrice());
-                selectedToken.setLastPrice(Double.parseDouble(tickerStatistics.getLastPrice()));
+                selectedToken.setLastPrice(tickerStatistics.getLastPrice());
                 if (compareTokenPrice(selectedToken)) {
                     if (isExpectedPriceHigh) {
-                        telegramMessageSendService.sendBotMessage(chatId, selectedToken.getSymbol().getSymbolName() + " isimli coin fiyatı %" + selectedToken.getRate() + " oranında yükselmiştir.");
+                        telegramMessageSendService.sendBotMessage(chatId, selectedToken.getSymbol().getSymbolName() + " piyasası %" + selectedToken.getRate() + " oranında yükselmiştir.");
 
                     } else {
-                        telegramMessageSendService.sendBotMessage(chatId, selectedToken.getSymbol().getSymbolName() + " isimli coin fiyatı %" + selectedToken.getRate() + " oranında düşmüştür.");
+                        telegramMessageSendService.sendBotMessage(chatId, selectedToken.getSymbol().getSymbolName() + " piyasası %" + selectedToken.getRate() + " oranında düşmüştür.");
 
                     }
                 }
@@ -66,10 +66,13 @@ public class PriceManitoringImpl implements PriceManitoringService {
     public boolean compareTokenPrice(SelectedToken selectedToken) {
         double possibleHighPrice;
         double possibleLowPrice;
-        possibleHighPrice = (((selectedToken.getOldPrice() * selectedToken.getRate()) / 100) + selectedToken.getOldPrice());
-        possibleLowPrice = (((selectedToken.getOldPrice() * selectedToken.getRate()) / 100) - selectedToken.getOldPrice());
-        if (selectedToken.getLastPrice() >= possibleHighPrice) {
+        possibleHighPrice = (((Double.parseDouble(selectedToken.getOldPrice()) * selectedToken.getRate()) / 100) + Double.parseDouble(selectedToken.getOldPrice()));
+        possibleLowPrice = (((Double.parseDouble(selectedToken.getOldPrice()) * selectedToken.getRate()) / 100) - Double.parseDouble(selectedToken.getOldPrice()));
+        if (Double.parseDouble(selectedToken.getLastPrice()) >= possibleHighPrice) {
             isExpectedPriceHigh = true;
+            return true;
+        }
+        if (Double.parseDouble(selectedToken.getLastPrice()) >= possibleLowPrice) {
             return true;
         }
 

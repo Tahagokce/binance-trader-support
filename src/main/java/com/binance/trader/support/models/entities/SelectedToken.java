@@ -34,9 +34,9 @@ public class SelectedToken implements Serializable {
     @JsonIgnore
     private User user;
 
-    private Double oldPrice;
+    private String oldPrice;
 
-    private Double lastPrice;
+    private String lastPrice;
 
     private Integer rate;
 }
